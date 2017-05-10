@@ -146,24 +146,6 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
             }
         });
 
-        final View changeCameraFlashModeBtn = view.findViewById(R.id.flash);
-        changeCameraFlashModeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_AUTO)) {
-                    mFlashMode = Camera.Parameters.FLASH_MODE_ON;
-                } else if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_ON)) {
-                    mFlashMode = Camera.Parameters.FLASH_MODE_OFF;
-                } else if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_OFF)) {
-                    mFlashMode = Camera.Parameters.FLASH_MODE_AUTO;
-                }
-
-                setupFlashMode();
-                setupCamera();
-            }
-        });
-        setupFlashMode();
-
         final ImageView takePhotoBtn = (ImageView) view.findViewById(R.id.capture_image_button);
         takePhotoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,20 +153,6 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                 takePicture();
             }
         });
-    }
-
-    private void setupFlashMode() {
-        View view = getView();
-        if (view == null) return;
-
-        final TextView autoFlashIcon = (TextView) view.findViewById(R.id.auto_flash_icon);
-        if (Camera.Parameters.FLASH_MODE_AUTO.equalsIgnoreCase(mFlashMode)) {
-            autoFlashIcon.setText("Auto");
-        } else if (Camera.Parameters.FLASH_MODE_ON.equalsIgnoreCase(mFlashMode)) {
-            autoFlashIcon.setText("On");
-        }  else if (Camera.Parameters.FLASH_MODE_OFF.equalsIgnoreCase(mFlashMode)) {
-            autoFlashIcon.setText("Off");
-        }
     }
 
     @Override
@@ -342,15 +310,6 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         // Set continuous picture focus, if it's supported
         if (parameters.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-        }
-
-        final View changeCameraFlashModeBtn = getView().findViewById(R.id.flash);
-        List<String> flashModes = parameters.getSupportedFlashModes();
-        if (flashModes != null && flashModes.contains(mFlashMode)) {
-            parameters.setFlashMode(mFlashMode);
-            changeCameraFlashModeBtn.setVisibility(View.VISIBLE);
-        } else {
-            changeCameraFlashModeBtn.setVisibility(View.INVISIBLE);
         }
 
         // Lock in the changes
